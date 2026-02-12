@@ -1,0 +1,14 @@
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+.next/
+dist/
+*.db
+.DS_Store
+Thumbs.db
+.claude/scratchpad/*
+!.claude/scratchpad/.gitkeep
+nul
+tmpclaude-*
