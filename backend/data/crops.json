@@ -1,0 +1,158 @@
+{
+  "arachide": {
+    "name_fr": "Arachide",
+    "name_wo": "Gerte",
+    "scientific": "Arachis hypogaea",
+    "zones": ["bassin_arachidier", "senegal_oriental", "casamance"],
+    "season": "nawet",
+    "sowing_month": [6, 7],
+    "harvest_month": [10, 11],
+    "cycle_days": [90, 120],
+    "water_needs_mm": [400, 600],
+    "soil_type": ["sableux", "sablo-argileux"],
+    "temperature_range": [25, 35],
+    "spacing_cm": {"rows": 50, "plants": 15},
+    "yield_kg_ha": [800, 1500],
+    "varieties": [
+      {"name": "55-437", "cycle": 90, "zone": "bassin_arachidier", "notes": "Variete precoce, tolerante a la secheresse"},
+      {"name": "73-33", "cycle": 105, "zone": "bassin_arachidier", "notes": "Bon rendement, graines moyennes"},
+      {"name": "GH 119-20", "cycle": 120, "zone": "casamance", "notes": "Cycle long, haut rendement en zone humide"},
+      {"name": "Fleur 11", "cycle": 95, "zone": "bassin_arachidier", "notes": "Resistante a la rosette"}
+    ],
+    "tips_fr": "Semer apres la premiere pluie utile (30mm). Traiter les semences au Granox. Sarcler 2 fois minimum.",
+    "tips_wo": "Bey ganaar bi ginnaaw taw bu am solo (30mm). Fajal gerte yi. Sarcle nak 2 yoon."
+  },
+  "mil": {
+    "name_fr": "Mil",
+    "name_wo": "Dugub",
+    "scientific": "Pennisetum glaucum",
+    "zones": ["bassin_arachidier", "sylvopastorale", "senegal_oriental"],
+    "season": "nawet",
+    "sowing_month": [6, 7],
+    "harvest_month": [9, 10],
+    "cycle_days": [90, 110],
+    "water_needs_mm": [300, 500],
+    "soil_type": ["sableux", "sablo-argileux"],
+    "temperature_range": [25, 38],
+    "spacing_cm": {"rows": 90, "plants": 90},
+    "yield_kg_ha": [500, 1200],
+    "varieties": [
+      {"name": "Souna 3", "cycle": 90, "zone": "bassin_arachidier", "notes": "Precoce, adapte zones seches"},
+      {"name": "IBV 8004", "cycle": 95, "zone": "bassin_arachidier", "notes": "Tolerant au mildiou"},
+      {"name": "Gawane", "cycle": 100, "zone": "sylvopastorale", "notes": "Variete locale amelioree"}
+    ],
+    "tips_fr": "Associer avec le niebe pour enrichir le sol. Eclaircir a 2-3 plants par poquet. Apport de fumure organique recommande.",
+    "tips_wo": "Bokkal ak niebe ngir sol bi baax. Waneal 2-3 plant ci poquet bi. Dugal fumure organique."
+  },
+  "riz": {
+    "name_fr": "Riz",
+    "name_wo": "Malo",
+    "scientific": "Oryza sativa",
+    "zones": ["casamance", "vallee_fleuve"],
+    "season": "nawet",
+    "sowing_month": [6, 7, 8],
+    "harvest_month": [10, 11, 12],
+    "cycle_days": [120, 150],
+    "water_needs_mm": [1000, 1500],
+    "soil_type": ["argileux", "argilo-limoneux", "bas-fonds"],
+    "temperature_range": [22, 35],
+    "spacing_cm": {"rows": 20, "plants": 20},
+    "yield_kg_ha": [2000, 5000],
+    "varieties": [
+      {"name": "Sahel 108", "cycle": 125, "zone": "vallee_fleuve", "notes": "Irrigue, tres bon rendement"},
+      {"name": "Sahel 201", "cycle": 130, "zone": "vallee_fleuve", "notes": "Resistant a la salinite"},
+      {"name": "NERICA-S 19", "cycle": 110, "zone": "casamance", "notes": "Pluvial, tolerant secheresse"},
+      {"name": "DJ 684 D", "cycle": 140, "zone": "casamance", "notes": "Riz de mangrove, cycle long"}
+    ],
+    "tips_fr": "En Casamance: riz pluvial direct. Au Fleuve: pepiniere puis repiquage a 21 jours. Gestion de l'eau critique.",
+    "tips_wo": "Casamance: bey direct ci taw bi. Fleuve: pepiniere ba 21 fan daal nga taal. Ndox bi am na solo lool."
+  },
+  "mais": {
+    "name_fr": "Maïs",
+    "name_wo": "Mbaxal",
+    "scientific": "Zea mays",
+    "zones": ["casamance", "senegal_oriental", "bassin_arachidier"],
+    "season": "nawet",
+    "sowing_month": [6, 7],
+    "harvest_month": [9, 10],
+    "cycle_days": [90, 120],
+    "water_needs_mm": [500, 800],
+    "soil_type": ["argilo-sableux", "limoneux"],
+    "temperature_range": [20, 35],
+    "spacing_cm": {"rows": 80, "plants": 25},
+    "yield_kg_ha": [1000, 3000],
+    "varieties": [
+      {"name": "Early Thai", "cycle": 90, "zone": "casamance", "notes": "Precoce, epis moyens"},
+      {"name": "Synthetic C", "cycle": 100, "zone": "casamance", "notes": "Bon rendement grain"},
+      {"name": "Obatanpa", "cycle": 110, "zone": "senegal_oriental", "notes": "QPM (qualite proteine amelioree)"}
+    ],
+    "tips_fr": "Semer en lignes. Buttage au 30eme jour. Apport d'azote au semis et a la montaison.",
+    "tips_wo": "Bey ci rang. Butter ci 30 fan. Dugal engrais ci semis ak ci montaison."
+  },
+  "niebe": {
+    "name_fr": "Niébé",
+    "name_wo": "Niebe",
+    "scientific": "Vigna unguiculata",
+    "zones": ["bassin_arachidier", "sylvopastorale", "senegal_oriental"],
+    "season": "nawet",
+    "sowing_month": [7, 8],
+    "harvest_month": [9, 10],
+    "cycle_days": [60, 80],
+    "water_needs_mm": [200, 400],
+    "soil_type": ["sableux", "sablo-argileux"],
+    "temperature_range": [25, 38],
+    "spacing_cm": {"rows": 75, "plants": 25},
+    "yield_kg_ha": [300, 1000],
+    "varieties": [
+      {"name": "Melakh", "cycle": 60, "zone": "bassin_arachidier", "notes": "Extra-precoce, tolerant secheresse"},
+      {"name": "Mouride", "cycle": 70, "zone": "bassin_arachidier", "notes": "Bon rendement, multi-usage"},
+      {"name": "Yacine", "cycle": 65, "zone": "sylvopastorale", "notes": "Precoce, grains blancs"}
+    ],
+    "tips_fr": "Excellent en association avec mil ou arachide. Fixe l'azote dans le sol. Recolter des que les gousses seches.",
+    "tips_wo": "Baax na ngir bokkal ak dugub walla gerte. Mooy teg azote ci suuf bi. Rang su gousses yi worwul."
+  },
+  "tomate": {
+    "name_fr": "Tomate",
+    "name_wo": "Tamaate",
+    "scientific": "Solanum lycopersicum",
+    "zones": ["niayes", "vallee_fleuve"],
+    "season": "noor",
+    "sowing_month": [10, 11, 12],
+    "harvest_month": [1, 2, 3, 4],
+    "cycle_days": [70, 90],
+    "water_needs_mm": [400, 600],
+    "soil_type": ["sablo-argileux", "limoneux"],
+    "temperature_range": [18, 30],
+    "spacing_cm": {"rows": 80, "plants": 40},
+    "yield_kg_ha": [15000, 40000],
+    "varieties": [
+      {"name": "Xina", "cycle": 75, "zone": "niayes", "notes": "Variete locale, bonne conservation"},
+      {"name": "Mongal F1", "cycle": 70, "zone": "vallee_fleuve", "notes": "Hybride, haut rendement"},
+      {"name": "Tropimech", "cycle": 80, "zone": "niayes", "notes": "Bonne tolerance chaleur"}
+    ],
+    "tips_fr": "Pepiniere 21 jours puis repiquage. Tuteurage recommande. Attention aux nematodes et a Tuta absoluta.",
+    "tips_wo": "Pepiniere 21 fan daal taal. Teg tuteuri. Geestuleen ci nematodes ak Tuta absoluta."
+  },
+  "oignon": {
+    "name_fr": "Oignon",
+    "name_wo": "Soble",
+    "scientific": "Allium cepa",
+    "zones": ["niayes", "vallee_fleuve"],
+    "season": "noor",
+    "sowing_month": [10, 11],
+    "harvest_month": [2, 3, 4],
+    "cycle_days": [90, 120],
+    "water_needs_mm": [350, 500],
+    "soil_type": ["sablo-argileux", "limoneux"],
+    "temperature_range": [15, 30],
+    "spacing_cm": {"rows": 20, "plants": 10},
+    "yield_kg_ha": [20000, 40000],
+    "varieties": [
+      {"name": "Violet de Galmi", "cycle": 110, "zone": "niayes", "notes": "Varieté dominante, bon stockage"},
+      {"name": "Safari", "cycle": 100, "zone": "vallee_fleuve", "notes": "Bonne productivite"},
+      {"name": "Noflaye", "cycle": 95, "zone": "niayes", "notes": "Variete locale amelioree"}
+    ],
+    "tips_fr": "Pepiniere 45 jours. Irrigation reguliere mais reduire avant recolte. Bon sechage pour stockage.",
+    "tips_wo": "Pepiniere 45 fan. Roose bu baax waaye waneal balaa rang. Wooreel ngir stockage."
+  }
+}

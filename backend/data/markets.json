@@ -1,0 +1,160 @@
+{
+  "markets": [
+    {
+      "id": "dakar_central",
+      "name": "Marché Sandaga",
+      "city": "dakar",
+      "lat": 14.6694,
+      "lon": -17.4380,
+      "type": "gros",
+      "products": ["arachide", "mil", "riz", "mais", "niebe", "tomate", "oignon"]
+    },
+    {
+      "id": "dakar_thiaroye",
+      "name": "Marché Thiaroye",
+      "city": "dakar",
+      "lat": 14.7374,
+      "lon": -17.3816,
+      "type": "gros",
+      "products": ["tomate", "oignon", "chou", "carotte"]
+    },
+    {
+      "id": "kaolack_central",
+      "name": "Marché Central Kaolack",
+      "city": "kaolack",
+      "lat": 14.1539,
+      "lon": -16.0758,
+      "type": "gros",
+      "products": ["arachide", "mil", "niebe", "mais"]
+    },
+    {
+      "id": "touba_ocass",
+      "name": "Marché Ocass Touba",
+      "city": "touba",
+      "lat": 14.8517,
+      "lon": -15.8819,
+      "type": "gros",
+      "products": ["arachide", "mil", "niebe", "riz"]
+    },
+    {
+      "id": "saint_louis_central",
+      "name": "Marché Saint-Louis",
+      "city": "saint-louis",
+      "lat": 16.0200,
+      "lon": -16.4900,
+      "type": "gros",
+      "products": ["riz", "tomate", "oignon"]
+    },
+    {
+      "id": "ziguinchor_central",
+      "name": "Marché Saint-Maur Ziguinchor",
+      "city": "ziguinchor",
+      "lat": 12.5700,
+      "lon": -16.2680,
+      "type": "gros",
+      "products": ["riz", "mais", "mangue", "anacarde"]
+    },
+    {
+      "id": "thies_central",
+      "name": "Marché Moussanté Thiès",
+      "city": "thies",
+      "lat": 14.7910,
+      "lon": -16.9230,
+      "type": "regional",
+      "products": ["mil", "arachide", "niebe", "tomate"]
+    },
+    {
+      "id": "richard_toll",
+      "name": "Marché Richard-Toll",
+      "city": "richard-toll",
+      "lat": 16.4625,
+      "lon": -15.7000,
+      "type": "regional",
+      "products": ["riz", "tomate", "oignon"]
+    }
+  ],
+  "prices": {
+    "arachide": {
+      "unit": "kg",
+      "prices_by_city": {
+        "dakar": {"min": 350, "max": 500, "avg": 425, "currency": "FCFA"},
+        "kaolack": {"min": 275, "max": 400, "avg": 340, "currency": "FCFA"},
+        "touba": {"min": 300, "max": 425, "avg": 365, "currency": "FCFA"},
+        "thies": {"min": 325, "max": 450, "avg": 390, "currency": "FCFA"}
+      },
+      "trend": "stable",
+      "season_note_fr": "Prix plus eleves en contre-saison (mars-juin). Vendre apres stockage.",
+      "season_note_wo": "Njeg bi gena digge ci mars-juin. Jaay ginnaaw stockage."
+    },
+    "mil": {
+      "unit": "kg",
+      "prices_by_city": {
+        "dakar": {"min": 250, "max": 400, "avg": 325, "currency": "FCFA"},
+        "kaolack": {"min": 175, "max": 300, "avg": 240, "currency": "FCFA"},
+        "touba": {"min": 200, "max": 325, "avg": 265, "currency": "FCFA"},
+        "thies": {"min": 225, "max": 350, "avg": 290, "currency": "FCFA"}
+      },
+      "trend": "hausse",
+      "season_note_fr": "Demande forte pendant Ramadan et fetes. Prix montent de fevrier a juin.",
+      "season_note_wo": "Laaj bu mag ci Ramadan ak fetes yi. Njeg bi yeg ci fevrier ba juin."
+    },
+    "riz": {
+      "unit": "kg",
+      "prices_by_city": {
+        "dakar": {"min": 350, "max": 500, "avg": 400, "currency": "FCFA"},
+        "saint-louis": {"min": 275, "max": 400, "avg": 325, "currency": "FCFA"},
+        "ziguinchor": {"min": 300, "max": 425, "avg": 350, "currency": "FCFA"},
+        "kaolack": {"min": 325, "max": 450, "avg": 375, "currency": "FCFA"}
+      },
+      "trend": "hausse",
+      "season_note_fr": "Riz local concurrence riz importe. Demande constante toute l'annee.",
+      "season_note_wo": "Malo bu rew mi mooy yeexee ak malo bu biir. Laaj bi tollu na."
+    },
+    "mais": {
+      "unit": "kg",
+      "prices_by_city": {
+        "dakar": {"min": 200, "max": 350, "avg": 275, "currency": "FCFA"},
+        "ziguinchor": {"min": 150, "max": 275, "avg": 210, "currency": "FCFA"},
+        "kaolack": {"min": 175, "max": 300, "avg": 235, "currency": "FCFA"},
+        "tambacounda": {"min": 150, "max": 275, "avg": 215, "currency": "FCFA"}
+      },
+      "trend": "stable",
+      "season_note_fr": "Forte demande pour l'alimentation animale. Stocker pour meilleur prix.",
+      "season_note_wo": "Laaj bu mag ngir rab yi. Tegal ngir njeg bu baax."
+    },
+    "niebe": {
+      "unit": "kg",
+      "prices_by_city": {
+        "dakar": {"min": 400, "max": 700, "avg": 550, "currency": "FCFA"},
+        "kaolack": {"min": 300, "max": 550, "avg": 425, "currency": "FCFA"},
+        "touba": {"min": 325, "max": 575, "avg": 450, "currency": "FCFA"},
+        "thies": {"min": 350, "max": 600, "avg": 475, "currency": "FCFA"}
+      },
+      "trend": "hausse",
+      "season_note_fr": "Tres demande. Prix doublent entre recolte et soudure (juin-aout). Excellent rapport qualite/prix.",
+      "season_note_wo": "Laaj bu bare. Njeg bi doole ci juin-aout. Baax na lool ngir jaay."
+    },
+    "tomate": {
+      "unit": "kg",
+      "prices_by_city": {
+        "dakar": {"min": 300, "max": 800, "avg": 500, "currency": "FCFA"},
+        "saint-louis": {"min": 200, "max": 600, "avg": 350, "currency": "FCFA"},
+        "thies": {"min": 250, "max": 700, "avg": 425, "currency": "FCFA"}
+      },
+      "trend": "volatile",
+      "season_note_fr": "Tres volatile. Pic de production = prix bas (janv-mars). Contre-saison = prix eleves (juil-sept).",
+      "season_note_wo": "Njeg bi daw lool. Production bu bari = njeg bu wanee. Contre-saison = njeg bu kawe."
+    },
+    "oignon": {
+      "unit": "kg",
+      "prices_by_city": {
+        "dakar": {"min": 250, "max": 600, "avg": 400, "currency": "FCFA"},
+        "saint-louis": {"min": 175, "max": 450, "avg": 300, "currency": "FCFA"},
+        "thies": {"min": 200, "max": 500, "avg": 350, "currency": "FCFA"}
+      },
+      "trend": "saisonnier",
+      "season_note_fr": "Prix bas pendant recolte (mars-avril). Stocker dans endroit sec et aere pour vendre en juillet-aout.",
+      "season_note_wo": "Njeg bu wanee ci rang (mars-avril). Tegal ci fu sedd te ngelaw am ngir jaay ci juillet-aout."
+    }
+  }
+}
