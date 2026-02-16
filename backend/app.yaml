@@ -1,0 +1,32 @@
+# Google App Engine configuration
+runtime: python311
+
+instance_class: F2
+
+env_variables:
+  APP_ENV: "production"
+  APP_PORT: "8080"
+  FRONTEND_URL: "https://agriagent.vercel.app"
+
+automatic_scaling:
+  min_instances: 0
+  max_instances: 3
+  target_cpu_utilization: 0.65
+  target_throughput_utilization: 0.65
+
+entrypoint: uvicorn main:app --host 0.0.0.0 --port $PORT
+
+handlers:
+  - url: /.*
+    script: auto
+    secure: always
+
+# Note: Set these secrets in Google Cloud Console > App Engine > Settings > Environment variables
+# Or use Secret Manager:
+# - ANTHROPIC_API_KEY
+# - TWILIO_ACCOUNT_SID
+# - TWILIO_AUTH_TOKEN
+# - TWILIO_PHONE_NUMBER
+# - SUPABASE_URL
+# - SUPABASE_SERVICE_ROLE_KEY
+# - SUPABASE_JWT_SECRET
