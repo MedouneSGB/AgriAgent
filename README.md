@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Claude-Sonnet%204-blueviolet?style=for-the-badge&logo=anthropic" />
+  <img src="https://img.shields.io/badge/Claude-Opus%204.6-blueviolet?style=for-the-badge&logo=anthropic" />
   <img src="https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js" />
   <img src="https://img.shields.io/badge/FastAPI-0.115-009688?style=for-the-badge&logo=fastapi" />
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
@@ -19,7 +19,7 @@ Over **500 million smallholder farmers** worldwide lack access to timely, expert
 
 ## 💡 The Solution
 
-**AgriAgent** is an autonomous multi-agent AI system that delivers personalized, real-time advice on **weather**, **crop management**, **disease diagnosis**, and **market pricing** — accessible via web, mobile, or SMS in the farmer's own language.
+**AgriAgent** is an autonomous multi-agent AI system powered by **Claude Opus 4.6** that delivers personalized, real-time advice on **weather**, **crop management**, **disease diagnosis**, and **market pricing** — accessible via web, mobile, or SMS in the farmer's own language.
 
 ---
 
@@ -247,14 +247,15 @@ agriagent/
 
 ## 🤝 How Claude is Used
 
-AgriAgent leverages Claude's capabilities across the entire stack:
+AgriAgent is built entirely on the **Claude Opus 4.6 ecosystem**, leveraging its capabilities across the entire stack:
 
-1. **Claude Sonnet 4** — Orchestrator agent for intelligent routing, language detection, and multi-agent synthesis
+1. **Claude Opus 4.6** — Powers the orchestrator agent for intelligent routing, language detection, and multi-agent synthesis
 2. **Claude 3 Haiku** — Fast sub-agents (weather, agro, market) with tool-use for real-time data access
 3. **Claude Vision** — Crop disease diagnosis from uploaded photos
 4. **Tool Use** — Each agent defines tools (functions) that Claude calls to fetch weather data, search crops, compare prices
 5. **Multilingual** — Claude generates responses in French, English, or Wolof based on detected language
 6. **Streaming** — SSE streaming for word-by-word chat responses
+7. **Claude Code** — The entire project was built using Claude Code as the development agent
 
 ---
 

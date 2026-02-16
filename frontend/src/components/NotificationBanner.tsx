@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AlertTriangle, CloudRain, Sun, Wind, X } from "lucide-react";
+import { AlertTriangle, CloudRain, Wind, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -12,11 +12,7 @@ const ALERTS_I18N = {
     fr: { title: "Saison des pluies", message: "C'est la période idéale pour planter mil, maïs et arachide !" },
     wo: { title: "Nawet", message: "Jamono bu baax ngir fàgg dugub, mboq ak gerte!" },
   },
-  "dry-season": {
-    en: { title: "Dry season", message: "Water your vegetable crops regularly (tomato, onion)." },
-    fr: { title: "Saison sèche", message: "Irriguez régulièrement vos cultures maraîchères (tomate, oignon)." },
-    wo: { title: "Noor", message: "Nosal sa tool yu maraîchères (tamaate, soble) ci bépp bés." },
-  },
+
   "morning-water": {
     en: { title: "Ideal watering time", message: "Cool temperature - optimal for irrigating your crops." },
     fr: { title: "Moment idéal pour arroser", message: "Température fraîche - optimal pour l'irrigation." },
@@ -82,19 +78,7 @@ export default function NotificationBanner() {
       });
     }
 
-    // Dry season alert (November-May)
-    if ((month >= 11 || month <= 5) && !dismissed.has("dry-season")) {
-      const t = ALERTS_I18N["dry-season"][lang] || ALERTS_I18N["dry-season"].fr;
-      newAlerts.push({
-        id: "dry-season",
-        type: "warning",
-        icon: Sun,
-        title: t.title,
-        message: t.message,
-        color: "#f59e0b",
-        bgColor: "#fffbeb",
-      });
-    }
+
 
     // Morning watering reminder (only show once per session)
     if (hour >= 6 && hour <= 8 && !dismissed.has("morning-water")) {
