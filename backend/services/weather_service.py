@@ -3,7 +3,7 @@ from config import settings
 
 
 async def get_weather_forecast(city: str) -> dict:
-    """Fetch 7-day weather forecast from Open-Meteo for a Senegalese city."""
+    """Fetch 7-day weather forecast from Open-Meteo for any city worldwide."""
     key = city.lower().strip()
     city_data = settings.CITIES.get(key)
     if not city_data:

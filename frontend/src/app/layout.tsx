@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import NotificationBanner from "@/components/NotificationBanner";
+import OnboardingTutorial from "@/components/OnboardingTutorial";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { AuthProvider } from "@/context/AuthContext";
+import { ThemeProvider } from "@/context/ThemeContext";
+import { ToastProvider } from "@/components/ui/Toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,10 +19,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-heading",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
 export const metadata: Metadata = {
-  title: "AgriAgent SN - Intelligent Agricultural Assistant",
+  title: "AgriAgent - Global Intelligent Agricultural Assistant",
   description:
-    "Multi-agent AI system for Senegalese farmers. Weather, crop, disease and market advice in French, English and Wolof.",
+    "Multi-agent AI system for farmers worldwide. Weather, crop, disease and market advice in multiple languages.",
 };
 
 export default function RootLayout({
@@ -28,12 +39,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} ${plusJakarta.variable} antialiased min-h-screen`}
       >
-        <LanguageProvider>
-          <Navbar />
-          <main>{children}</main>
-        </LanguageProvider>
+        <ThemeProvider>
+          <ToastProvider>
+            <LanguageProvider>
+              <AuthProvider>
+                <Navbar />
+                <NotificationBanner />
+                <OnboardingTutorial />
+                <main>{children}</main>
+              </AuthProvider>
+            </LanguageProvider>
+          </ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

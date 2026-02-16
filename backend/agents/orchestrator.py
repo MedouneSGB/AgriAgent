@@ -61,8 +61,8 @@ def _fast_route(message: str) -> list[str]:
 
 # ---------- Synthesis prompt (used only for multi-agent) ----------
 
-SYNTHESIS_PROMPT = """You synthesize responses from multiple agricultural agents into one coherent answer for a Senegalese farmer.
-- Be warm, practical, and Senegal-specific
+SYNTHESIS_PROMPT = """You synthesize responses from multiple agricultural agents into one coherent answer for a farmer anywhere in the world.
+- Be warm, practical, and context-specific to the farmer's region
 - Respond in the specified language
 - Keep it concise and actionable"""
 
@@ -73,8 +73,21 @@ async def orchestrate(
     language: str | None = None,
     session_id: str | None = None,
     channel: str = "web",
+    user_id: str | None = None,
 ) -> dict:
     """Main orchestrator: fast keyword routing + parallel sub-agents."""
+
+    # If user is logged in, enrich with profile data
+    if user_id and (not city or not language):
+        try:
+            from services.supabase_service import get_supabase
+            sb = get_supabase()
+            profile = sb.table("profiles").select("city, preferred_language, zone").eq("id", user_id).single().execute()
+            if profile.data:
+                city = city or profile.data.get("city") or "kaolack"
+                language = language or profile.data.get("preferred_language") or "fr"
+        except Exception:
+            pass
 
     lang = language or "en"
     routed_agents = _fast_route(message)
@@ -131,12 +144,22 @@ async def orchestrate(
 
 
 def _detect_language(text: str) -> str:
-    """Simple language detection based on common Wolof words."""
+    """Detect language: Wolof, English, or French (default)."""
     wolof_markers = [
         "nanga def", "jere jef", "ba beneen", "dina", "mooy",
         "gerte", "dugub", "malo", "mbaxal", "taw", "ndox",
         "bey", "tool", "suuf", "nawet", "noor",
     ]
+    english_markers = [
+        "what", "how", "when", "where", "please", "help",
+        "weather", "plant", "crop", "price", "market",
+        "should", "could", "would", "the", "this",
+    ]
     text_lower = text.lower()
     wolof_count = sum(1 for w in wolof_markers if w in text_lower)
-    return "wo" if wolof_count >= 2 else "fr"
+    english_count = sum(1 for w in english_markers if w in text_lower)
+    if wolof_count >= 2:
+        return "wo"
+    if english_count >= 2:
+        return "en"
+    return "fr"

@@ -1,241 +1,184 @@
-# Architecture AgriAgent SN
+# Architecture AgriAgent
 
 ## Vue d'ensemble
 
 ```
-                    +------------------+
-                    |   UTILISATEURS   |
-                    +------------------+
-                    |  SMS (Wolof/FR)  |
-                    |  Web Dashboard   |
-                    +--------+---------+
-                             |
-                    +--------v---------+
-                    |   API GATEWAY    |
-                    |   (FastAPI)      |
-                    +--------+---------+
-                             |
-                    +--------v---------+
-                    |   ORCHESTRATEUR  |
-                    |   (Agent Chef)   |
-                    |   Opus 4.6       |
-                    +--------+---------+
-                             |
-            +----------------+----------------+
-            |                |                |
-   +--------v------+ +------v-------+ +------v--------+
-   | AGENT METEO   | | AGENT AGRO   | | AGENT MARCHE  |
-   | - Previsions  | | - Cultures   | | - Prix        |
-   | - Alertes     | | - Maladies   | | - Tendances   |
-   | - Historique  | | - Calendrier | | - Conseils    |
-   +--------+------+ +------+-------+ +------+--------+
-            |                |                |
-   +--------v------+ +------v-------+ +------v--------+
-   | MCP: OpenMeteo| | MCP: AgriDB  | | MCP: MarketDB |
-   | API Weather   | | Knowledge    | | Price Data    |
-   +---------------+ +--------------+ +---------------+
+                    ┌──────────────────┐
+                    │   UTILISATEURS   │
+                    ├──────────────────┤
+                    │ Web (FR/EN/WO)   │
+                    │ SMS (Twilio)     │
+                    │ Voice Input      │
+                    └────────┬─────────┘
+                             │
+              ┌──────────────┴──────────────┐
+              │       NEXT.JS 16 FRONTEND   │
+              │  React 19 · Tailwind · i18n │
+              └──────────────┬──────────────┘
+                             │ REST + SSE
+              ┌──────────────┴──────────────┐
+              │      FASTAPI BACKEND        │
+              │  Auth (Supabase JWT)        │
+              │  Public + Protected Routes  │
+              └──────────────┬──────────────┘
+                             │
+              ┌──────────────┴──────────────┐
+              │      ORCHESTRATEUR          │
+              │   Claude Sonnet 4           │
+              │   Routage par mots-clés     │
+              │   Détection langue auto     │
+              │   Synthèse multi-agent      │
+              └──────────────┬──────────────┘
+                             │
+         ┌───────────────────┼───────────────────┐
+         │                   │                   │
+┌────────┴────────┐ ┌───────┴────────┐ ┌────────┴────────┐
+│  AGENT MÉTÉO    │ │  AGENT AGRO    │ │  AGENT MARCHÉ   │
+│  Claude 3 Haiku │ │  Claude 3 Haiku│ │  Claude 3 Haiku │
+│  + Open-Meteo   │ │  + crops.json  │ │  + markets.json │
+│  tool-use       │ │  + diseases    │ │  + prix/ville   │
+│                 │ │  + zones.json  │ │                 │
+└─────────────────┘ └────────────────┘ └─────────────────┘
+         │                   │                   │
+    Open-Meteo API     Knowledge Base      Market Data
+    (50+ villes)      (16+ zones, 50+     (prix par
+                       cultures)           région)
 ```
 
-## Agents Details
+## Agents
 
-### 1. Agent Orchestrateur (orchestrator)
-**Role:** Point d'entree unique, routage intelligent, synthese
+### 1. Orchestrateur (`orchestrator.py`)
+- **Modèle :** Claude Sonnet 4
+- **Rôle :** Point d'entrée unique, routage intelligent
+- **Capacités :**
+  - Détection de langue (FR/EN/WO) automatique
+  - Routage par mots-clés vers les sub-agents appropriés
+  - Exécution parallèle des agents quand nécessaire
+  - Synthèse des réponses multiples
+  - Adaptation au canal (SMS court / Web détaillé)
 
-**Capacites:**
-- Analyse l'intention de l'utilisateur (langue, besoin)
-- Determine quels agents specialises appeler
-- Synthetise les reponses de multiples agents
-- Gere le contexte conversationnel
-- Adapte la reponse au canal (SMS court vs Web detaille)
+### 2. Agent Météo (`weather_agent.py`)
+- **Modèle :** Claude 3 Haiku + Tool Use
+- **Outil :** `get_weather` → Open-Meteo API
+- **Capacités :** Prévisions 7 jours, codes WMO traduits, conseils agricoles contextuels
 
-**Outils MCP:**
-- `detect_language` - Detecter Wolof/Francais
-- `translate` - Traduire entre langues
-- `route_query` - Router vers le bon agent
+### 3. Agent Agronomique (`agro_agent.py`)
+- **Modèle :** Claude 3 Haiku + Tool Use
+- **Outils :** `search_crops`, `search_diseases`, `get_zone_info`
+- **Capacités :** Diagnostic cultures/maladies, calendrier cultural, recommandations par zone
 
-### 2. Agent Meteo (weather_agent)
-**Role:** Informations climatiques et alertes
+### 4. Agent Marché (`market_agent.py`)
+- **Modèle :** Claude 3 Haiku + Tool Use
+- **Outils :** `search_market_prices`, `compare_prices`
+- **Capacités :** Prix par culture/ville, comparaison inter-marchés, conseils de vente
 
-**Capacites:**
-- Previsions meteo 7 jours par localite
-- Donnees historiques de precipitation
-- Detection evenements extremes
-- Recommandations liees au climat (irrigation, recolte)
+### 5. Agent Alertes (`alerts_agent.py`)
+- **Modèle :** Claude 3 Haiku
+- **Capacités :** Génération d'alertes personnalisées (météo, calendrier, marché, ravageurs)
 
-**Outils MCP:**
-- `get_forecast` - Previsions Open-Meteo
-- `get_historical_weather` - Donnees historiques
-- `check_alerts` - Alertes meteo
+---
 
-### 3. Agent Agronomique (agro_agent)
-**Role:** Expertise agricole et conseils culturaux
+## Frontend — Pages & Composants
 
-**Capacites:**
-- Diagnostic maladies et ravageurs
-- Calendrier cultural par zone et culture
-- Recommandations de semis/recolte
-- Pratiques durables et bio
+| Route | Page | Description |
+|-------|------|-------------|
+| `/` | Landing | Hero, features, stats, architecture, démo SMS |
+| `/chat` | Chat IA | Streaming SSE, voice, photo diagnosis, historique |
+| `/dashboard` | Dashboard | Carte mondiale, météo, cultures, agents |
+| `/parcelles` | Parcelles | Gestion des champs (CRUD) |
+| `/parcelles/[id]` | Détail | Cultures, rotation, historique |
+| `/calendar` | Calendrier | Grille + timeline, par zone |
+| `/profile` | Profil | Préférences, gamification |
+| `/login` `/signup` | Auth | Supabase email/password |
 
-**Outils MCP:**
-- `get_crop_info` - Info sur une culture
-- `diagnose_disease` - Diagnostic maladie
-- `get_calendar` - Calendrier cultural
-- `get_treatment` - Traitements recommandes
+### Composants clés
+- `WorldMap` — Carte Leaflet interactive avec marqueurs pays
+- `SmartSuggestions` — Suggestions contextuelles intelligentes
+- `NotificationBanner` — Alertes saisonnières i18n
+- `OnboardingTutorial` — Tutoriel première visite
+- `GamificationStats` — Badges et niveaux fermier
 
-### 4. Agent Marche (market_agent)
-**Role:** Intelligence marche et prix
+---
 
-**Capacites:**
-- Prix actuels par produit et region
-- Tendances de prix
-- Meilleur moment pour vendre
-- Marches les plus proches et rentables
+## API Endpoints
 
-**Outils MCP:**
-- `get_prices` - Prix actuels
-- `get_trends` - Tendances
-- `find_markets` - Marches proches
-- `recommend_sell` - Conseil de vente
+### Publics
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| POST | `/api/chat` | Chat IA (JSON) |
+| POST | `/api/chat/stream` | Chat streaming SSE |
+| GET | `/api/weather/{city}` | Prévisions 7 jours |
+| POST | `/api/sms/incoming` | Webhook Twilio |
+| POST | `/api/diagnose` | Diagnostic photo (Vision) |
+| GET | `/api/crops` | Données cultures |
+| GET | `/api/markets` | Données marchés |
+| GET | `/api/zones` | Zones agro-écologiques |
+| GET | `/api/cities` | Villes et coordonnées |
 
-## Zones Agro-ecologiques du Senegal
+### Protégés (JWT)
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| GET/PUT | `/api/me` | Profil utilisateur |
+| GET/POST | `/api/parcelles` | Gestion parcelles |
+| GET/PUT/DELETE | `/api/parcelles/{id}` | CRUD parcelle |
+| GET/POST | `/api/cultures` | Gestion cultures |
+| GET/POST | `/api/history` | Historique saisons |
+| GET | `/api/alerts` | Alertes personnalisées |
+| POST | `/api/alerts/generate` | Générer alertes IA |
+| GET | `/api/calendar/{zone}` | Calendrier par zone |
+| GET | `/api/rotation/{id}` | Conseil rotation |
 
-1. **Niayes** (cote nord) - Maraichage, fruits
-2. **Bassin Arachidier** (centre) - Arachide, mil, niebe
-3. **Casamance** (sud) - Riz, mais, fruits
-4. **Vallee du Fleuve Senegal** (nord) - Riz irrigue, tomate
-5. **Zone Sylvo-pastorale** (nord-est) - Elevage, mil
-6. **Senegal Oriental** (est) - Coton, mais
+---
 
-## Cultures Principales
+## Base de données (Supabase / PostgreSQL)
 
-| Culture | Zone | Saison | Cycle |
-|---------|------|--------|-------|
-| Arachide | Bassin arachidier | Hivernage (juin-oct) | 90-120 jours |
-| Mil | Centre, Nord | Hivernage | 90-110 jours |
-| Riz | Casamance, Fleuve | Hivernage / Irrigue | 120-150 jours |
-| Mais | Casamance, Est | Hivernage | 90-120 jours |
-| Niebe | Centre | Hivernage | 60-80 jours |
-| Tomate | Niayes, Fleuve | Saison seche | 70-90 jours |
-| Oignon | Niayes, Fleuve | Saison seche | 90-120 jours |
-
-## Flow SMS Exemple
-
-```
-Fermier (Wolof): "METEO Kaolack"
-                    |
-                    v
-[API Gateway] -> Detect langue: Wolof
-                    |
-                    v
-[Orchestrateur] -> Route vers Agent Meteo
-                    |
-                    v
-[Agent Meteo] -> Open-Meteo API (lat: 14.15, lon: -16.07)
-              -> Prevision: 35C, pas de pluie 5 jours
-                    |
-                    v
-[Orchestrateur] -> Contextualise pour agriculteur
-               -> "Taw baxul ci 5 fan yi. Nangula sa tool yi."
-               -> (Pas de pluie pendant 5 jours. Arrosez vos cultures.)
-                    |
-                    v
-[SMS] -> Envoie en Wolof, format court
+```sql
+profiles       — id, user_id, full_name, phone, city, zone, preferred_language
+parcelles      — id, user_id, name, surface_ha, zone, soil_type, irrigation
+cultures       — id, parcelle_id, crop_name, planted_at, status, notes
+season_history — id, user_id, parcelle_id, season, crop_name, yield_kg, expenses, revenue
+alerts         — id, user_id, type, severity, title, message, is_read
 ```
 
-## Flow Web Exemple
+Toutes les tables ont Row Level Security (RLS) activé.
 
-```
-Fermier (Web): "Quand planter mes arachides cette annee a Kaolack?"
-                    |
-                    v
-[Orchestrateur] -> Appelle Agent Meteo + Agent Agro en parallele
-                    |
-        +-----------+-----------+
-        |                       |
-[Agent Meteo]           [Agent Agro]
-Prevision saison:       Calendrier arachide:
-Pluies prevues          Semis: debut hivernage
-mi-juin                 Sol: sableux ok
-                        Zone: Bassin arachidier
-        |                       |
-        +-----------+-----------+
-                    |
-                    v
-[Orchestrateur] -> Synthese:
-"Pour vos arachides a Kaolack, je recommande de semer
-entre le 15 et 25 juin. Les previsions indiquent un
-debut d'hivernage normal mi-juin. Choisissez la variete
-55-437 adaptee au bassin arachidier."
-```
+---
 
 ## Structure du Code
 
 ```
-agriagent-sn/
-├── README.md
-├── LICENSE (MIT)
-├── .env.example
-├── docker-compose.yml
-│
+agriagent/
 ├── backend/
-│   ├── main.py                 # FastAPI app
-│   ├── config.py               # Configuration
-│   ├── requirements.txt
-│   │
+│   ├── main.py              # FastAPI, CORS, routers
+│   ├── config.py            # Settings, villes, zones
+│   ├── auth.py              # JWT verification (Supabase)
+│   ├── api.py               # Routes publiques
+│   ├── api_protected.py     # Routes protégées
+│   ├── data_loader.py       # Chargeur JSON
+│   ├── migration.sql        # Schema Supabase
 │   ├── agents/
-│   │   ├── __init__.py
-│   │   ├── orchestrator.py     # Agent principal
-│   │   ├── weather_agent.py    # Agent meteo
-│   │   ├── agro_agent.py       # Agent agronomique
-│   │   └── market_agent.py     # Agent marche
-│   │
-│   ├── mcp_servers/
-│   │   ├── weather_server.py   # MCP server meteo
-│   │   ├── agro_server.py      # MCP server agronomique
-│   │   └── market_server.py    # MCP server marche
-│   │
-│   ├── data/
-│   │   ├── crops.json          # Base cultures
-│   │   ├── diseases.json       # Base maladies
-│   │   ├── markets.json        # Donnees marches
-│   │   └── zones.json          # Zones agro-ecologiques
-│   │
+│   │   ├── orchestrator.py
+│   │   ├── weather_agent.py
+│   │   ├── agro_agent.py
+│   │   ├── market_agent.py
+│   │   └── alerts_agent.py
 │   ├── services/
-│   │   ├── sms_service.py      # Integration Twilio
-│   │   ├── weather_service.py  # Client OpenMeteo
-│   │   └── translation.py     # Traduction Wolof/FR
-│   │
-│   └── tests/
-│       ├── test_orchestrator.py
-│       ├── test_weather.py
-│       └── test_agro.py
+│   │   ├── weather_service.py
+│   │   ├── supabase_service.py
+│   │   └── sms_service.py
+│   └── data/
+│       ├── crops.json
+│       ├── diseases.json
+│       ├── markets.json
+│       └── zones.json
 │
 ├── frontend/
-│   ├── package.json
-│   ├── next.config.js
-│   │
-│   ├── app/
-│   │   ├── layout.tsx
-│   │   ├── page.tsx            # Landing page
-│   │   ├── dashboard/
-│   │   │   └── page.tsx        # Dashboard principal
-│   │   ├── chat/
-│   │   │   └── page.tsx        # Interface chat
-│   │   └── agents/
-│   │       └── page.tsx        # Visualisation agents
-│   │
-│   ├── components/
-│   │   ├── Map.tsx             # Carte Senegal
-│   │   ├── AgentFlow.tsx       # Visu agents
-│   │   ├── WeatherCard.tsx     # Widget meteo
-│   │   ├── PriceTable.tsx      # Tableau prix
-│   │   └── ChatInterface.tsx   # Chat
-│   │
-│   └── lib/
-│       └── api.ts              # Client API
+│   ├── src/app/             # Pages Next.js
+│   ├── src/components/      # Composants React
+│   ├── src/components/ui/   # Design system
+│   ├── src/context/         # Auth, Language, Theme
+│   ├── src/lib/             # API client, Supabase
+│   └── src/data/            # Données agriculture mondiale
 │
-└── docs/
-    ├── HACKATHON_RESUME.md
-    ├── STRATEGIE_VICTOIRE.md
-    └── ARCHITECTURE.md
+└── .claude/docs/            # Documentation projet
 ```

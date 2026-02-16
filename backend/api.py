@@ -1,7 +1,7 @@
 import json
 import asyncio
 import base64
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import Optional
@@ -11,6 +11,7 @@ from agents.orchestrator import orchestrate, _fast_route
 from services.weather_service import get_weather_forecast
 from services.sms_service import handle_incoming_sms
 from config import settings
+from auth import get_optional_user
 
 router = APIRouter()
 
@@ -36,13 +37,14 @@ class SMSRequest(BaseModel):
 
 # --- Chat endpoint (main) ---
 @router.post("/chat", response_model=ChatResponse)
-async def chat(req: ChatRequest):
+async def chat(req: ChatRequest, user_id: str | None = Depends(get_optional_user)):
     try:
         result = await orchestrate(
             message=req.message,
             city=req.city,
             language=req.language,
             session_id=req.session_id,
+            user_id=user_id,
         )
         return result
     except Exception as e:
@@ -51,7 +53,7 @@ async def chat(req: ChatRequest):
 
 # --- Streaming chat endpoint (SSE) ---
 @router.post("/chat/stream")
-async def chat_stream(req: ChatRequest):
+async def chat_stream(req: ChatRequest, user_id: str | None = Depends(get_optional_user)):
     async def event_stream():
         try:
             routed = _fast_route(req.message)
@@ -62,6 +64,7 @@ async def chat_stream(req: ChatRequest):
                 city=req.city,
                 language=req.language,
                 session_id=req.session_id,
+                user_id=user_id,
             )
 
             text = result["response"]
@@ -107,16 +110,16 @@ async def sms_incoming(req: SMSRequest):
 
 
 # --- Crop photo diagnosis (Claude Vision) ---
-DIAGNOSIS_PROMPT = """You are an expert agricultural advisor for Senegalese farmers.
+DIAGNOSIS_PROMPT = """You are an expert agricultural advisor for farmers worldwide.
 Analyze this photo of a crop/plant and provide:
 1. **Identified crop** (if recognizable)
 2. **Health assessment** - is the plant healthy or showing signs of disease/stress?
 3. **Diagnosis** - if diseased, identify the most likely disease or pest
 4. **Symptoms spotted** - describe what you see in the image
-5. **Treatment** - practical treatment steps using methods available to Senegalese farmers (including traditional/organic methods)
+5. **Treatment** - practical treatment steps using methods available locally (including traditional/organic methods)
 6. **Prevention** - how to prevent this in the future
 
-Be specific, practical, and Senegal-context-aware (available products, local climate, etc).
+Be specific, practical, and context-aware (local climate, available products, etc).
 Use markdown tables for structured data when appropriate.
 Respond in the language specified."""
 
